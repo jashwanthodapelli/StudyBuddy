@@ -70,6 +70,19 @@ studybuddy/
 | JavaScript | App logic, localStorage, interactions |
 
 ---
+## 🏗️ System Architecture
+
+User Input
+   ↓
+Web Interface (HTML + CSS)
+   ↓
+Application Logic (JavaScript)
+   ↓
+Browser Storage (localStorage)
+   ↓
+Updated UI & Progress Tracking
+
+---
 
 ## 🚀 Future Improvements
 - Dark mode
