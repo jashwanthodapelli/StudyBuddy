@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudyBuddy 🌟</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══════════════════════════════
+       HEADER
+  ══════════════════════════════ -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-blob">📚</div>
+      <div>
+        <div class="app-name">StudyBuddy! 🌟</div>
+        <div class="app-tagline">Your fun study helper</div>
+      </div>
+    </div>
+    <button class="streak-pill" onclick="goTab('streak')">
+      🔥 <span id="header-streak">0</span> days!
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════
+       XP / PROGRESS BAR
+  ══════════════════════════════ -->
+  <div class="xp-bar-wrap">
+    <div class="xp-label">⚡ Progress</div>
+    <div class="xp-track">
+      <div class="xp-fill" id="xp-fill" style="width:0%"></div>
+    </div>
+    <div class="xp-pct" id="xp-pct">0%</div>
+  </div>
+
+  <!-- ══════════════════════════════
+       STATS ROW
+  ══════════════════════════════ -->
+  <div class="stats-row">
+    <div class="stat-bubble s1">
+      <span class="stat-emoji">📋</span>
+      <div class="stat-number" id="st-total">0</div>
+      <div class="stat-name">Tasks</div>
+    </div>
+    <div class="stat-bubble s2">
+      <span class="stat-emoji">✅</span>
+      <div class="stat-number" id="st-done">0</div>
+      <div class="stat-name">Done!</div>
+    </div>
+    <div class="stat-bubble s3">
+      <span class="stat-emoji">⏰</span>
+      <div class="stat-number" id="st-due">0</div>
+      <div class="stat-name">Due Today</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       NAV TABS
+  ══════════════════════════════ -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="ntab-home"     onclick="goTab('home')">    <span>🏠</span>Home    </button>
+    <button class="nav-tab"        id="ntab-tasks"    onclick="goTab('tasks')">   <span>📝</span>Tasks   </button>
+    <button class="nav-tab"        id="ntab-streak"   onclick="goTab('streak')">  <span>🔥</span>Streak  </button>
+    <button class="nav-tab"        id="ntab-progress" onclick="goTab('progress')"><span>📊</span>Progress</button>
+  </div>
+
+  <!-- ══════════════════════════════
+       HOME TAB
+  ══════════════════════════════ -->
+  <div class="section active" id="tab-home">
+
+    <!-- Smart suggestion banner -->
+    <div class="suggestion-banner" id="home-suggest" style="display:none">
+      <span class="big-emoji">💡</span>
+      <span id="home-suggest-txt"></span>
+    </div>
+
+    <!-- Priority task list -->
+    <div class="card">
+      <div class="card-title">📌 Do These First!</div>
+      <div id="home-tasks"></div>
+    </div>
+
+    <!-- Add task form -->
+    <div class="card">
+      <div class="card-title">➕ Add a New Task</div>
+
+      <input class="fancy-input" id="q-name" type="text"
+             placeholder="What do you need to study? ✏️" maxlength="80"/>
+
+      <!-- Subject selector chips -->
+      <div class="subject-chips" id="q-chips">
+        <div class="chip selected" data-s="Maths">🔢 Maths</div>
+        <div class="chip" data-s="Science">🔬 Science</div>
+        <div class="chip" data-s="English">📖 English</div>
+        <div class="chip" data-s="History">🏛️ History</div>
+        <div class="chip" data-s="Art">🎨 Art</div>
+        <div class="chip" data-s="Other">📌 Other</div>
+      </div>
+
+      <!-- Priority selector buttons -->
+      <div class="priority-row" id="q-prios">
+        <button class="prio-btn psel-urgent" data-p="urgent"><span>🚨</span>Urgent</button>
+        <button class="prio-btn" data-p="high">           <span>⚡</span>High  </button>
+        <button class="prio-btn" data-p="medium">         <span>📘</span>Normal</button>
+        <button class="prio-btn" data-p="low">            <span>😊</span>Easy  </button>
+      </div>
+
+      <!-- Due date -->
+      <input class="fancy-input" id="q-due" type="date" style="font-size:14px; margin-bottom:12px;"/>
+
+      <button class="big-btn" onclick="addTask()">🚀 Add Task!</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       TASKS TAB
+  ══════════════════════════════ -->
+  <div class="section" id="tab-tasks">
+    <div class="card">
+      <div class="card-title">📝 All My Tasks</div>
+
+      <!-- Filter chips -->
+      <div class="filter-bar">
+        <div class="filter-chip active" onclick="setFilter('all',this)">    🌟 All    </div>
+        <div class="filter-chip"        onclick="setFilter('pending',this)">⏳ Pending </div>
+        <div class="filter-chip"        onclick="setFilter('done',this)">   ✅ Done    </div>
+        <div class="filter-chip"        onclick="setFilter('urgent',this)"> 🚨 Urgent  </div>
+      </div>
+
+      <div id="all-tasks"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       STREAK TAB
+  ══════════════════════════════ -->
+  <div class="section" id="tab-streak">
+    <div class="card">
+      <div class="card-title">🔥 My Study Streak</div>
+      <div class="streak-section">
+        <div class="streak-big"       id="streak-num">0</div>
+        <div class="streak-caption">Days in a row! 🎉</div>
+        <div class="streak-motivation" id="streak-msg">Start studying to begin your streak!</div>
+        <div class="streak-week"       id="streak-week"></div>
+      </div>
+      <button class="log-study-btn" id="log-btn" onclick="logStudy()">✅ I Studied Today!</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏅 My Badges</div>
+      <div id="badges" style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start;"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       PROGRESS TAB
+  ══════════════════════════════ -->
+  <div class="section" id="tab-progress">
+
+    <div class="progress-grid">
+
+      <!-- Overall completion ring -->
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">🎯 Overall</div>
+        <div class="prog-ring-wrap">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#f0f0f0" stroke-width="11"/>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gr2)" stroke-width="11"
+              stroke-linecap="round" stroke-dasharray="314"
+              id="prog-ring" stroke-dashoffset="314"
+              transform="rotate(-90 60 60)"
+              style="transition: stroke-dashoffset 0.9s cubic-bezier(.34,1.56,.64,1)"/>
+            <defs>
+              <linearGradient id="gr2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#667eea"/>
+                <stop offset="100%" stop-color="#764ba2"/>
+              </linearGradient>
+            </defs>
+            <text x="60" y="56" text-anchor="middle" fill="#2C3E50"
+                  font-size="20" font-weight="900" font-family="Nunito,sans-serif"
+                  id="prog-pct">0%</text>
+            <text x="60" y="72" text-anchor="middle" fill="#aaa"
+                  font-size="10" font-family="Nunito,sans-serif">done!</text>
+          </svg>
+          <div style="font-size:12px; font-weight:800; color:var(--muted); margin-top:4px;"
+               id="prog-sub">0 of 0</div>
+        </div>
+      </div>
+
+      <!-- Subject breakdown -->
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">📚 Subjects</div>
+        <div id="sub-prog"></div>
+      </div>
+
+    </div>
+
+    <!-- Priority distribution -->
+    <div class="card" style="margin-top:13px">
+      <div class="card-title">🌈 Priority</div>
+      <div id="prio-prog"></div>
+    </div>
+
+  </div>
+
+</div><!-- /.app -->
+
+<!-- Toast notification container -->
+<div class="toast-wrap" id="toasts"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
